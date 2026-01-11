@@ -81,15 +81,7 @@ The application fetches and displays user account data using authenticated reque
 
 ---
 
-## 🌐 APIs & Documentation
 
-- **Peanut REST API (Swagger):**  
-  https://peanut.ifxdb.com/docs/clientcabinet/index.html
-
-- **SOAP Promo Service:**  
-  https://api-forexcopy.contentdatapro.com/Services/CabinetMicroService.svc
-
----
 
 ## 🧩 Application Behavior & UX
 
