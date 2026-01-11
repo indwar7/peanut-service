@@ -11,7 +11,7 @@ The application integrates with the **Peanut Client Account Service** to provide
 - **Language:** Dart
 - **Platform:** Android
 - **Architecture:** Clean / MVVM-inspired
-- **Networking:** REST & SOAP APIs
+- **Networking:** REST APIs
 - **State Management:** Flutter native / Provider (as implemented)
 - **Build Output:** APK
 
