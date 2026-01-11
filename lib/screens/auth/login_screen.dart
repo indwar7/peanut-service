@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/auth_service.dart';
 import 'signup_screen.dart';
@@ -45,12 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final success = await _authService.login(
+      final result = await _authService.login(
         _loginController.text.trim(),
         _passwordController.text,
       );
 
-      if (success) {
+      if (result['success']) {
         final prefs = await SharedPreferences.getInstance();
         if (_rememberMe) {
           await prefs.setString(
@@ -66,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Icon(Icons.check_circle, color: Colors.white),
                   const SizedBox(width: 12),
-                  const Text('Login successful!'),
+                  Text(result['message'] ?? 'Login successful!'),
                 ],
               ),
               backgroundColor: Colors.green,
@@ -83,7 +84,8 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         if (mounted) {
-          _showErrorDialog('Login failed. Please try again.');
+          _showErrorDialog(
+              result['message'] ?? 'Login failed. Please try again.');
         }
       }
     } catch (e) {
@@ -184,12 +186,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Enter your login ID and password to sign in',
+                  'Enter your account number and password to sign in',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 32),
                 const Text(
-                  'Login',
+                  'Account Number',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -199,10 +201,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _loginController,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(
-                    hintText: 'Enter your login ID or email',
-                    prefixIcon: const Icon(Icons.person_outline),
+                    hintText: 'Enter your account number (e.g., 2088888)',
+                    prefixIcon: const Icon(Icons.account_circle_outlined),
                     filled: true,
                     fillColor: Colors.grey[100],
                     border: OutlineInputBorder(
@@ -223,7 +226,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your login ID';
+                      return 'Please enter your account number';
+                    }
+                    if (value.length < 6) {
+                      return 'Account number must be at least 6 digits';
                     }
                     return null;
                   },
@@ -349,29 +355,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                 fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.grey[300])),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('or',
-                          style:
-                              TextStyle(fontSize: 14, color: Colors.grey[600])),
-                    ),
-                    Expanded(child: Divider(color: Colors.grey[300])),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _socialButton(icon: Icons.g_mobiledata),
-                    const SizedBox(width: 16),
-                    _socialButton(icon: Icons.facebook),
-                    const SizedBox(width: 16),
-                    _socialButton(icon: Icons.apple),
-                  ],
+                const SizedBox(height: 32),
+                // Test credentials info
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                        color: const Color(0xFF00A8E8).withOpacity(0.3)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.info_outline,
+                              color: const Color(0xFF00A8E8), size: 20),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Test Account',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF00A8E8),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Login: 2088888\nPassword: ral11lod',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[700],
+                          fontFamily: 'monospace',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 24),
                 Row(
@@ -390,7 +412,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: const Text(
-                        'Sign up',
+                        'Contact Support',
                         style: TextStyle(
                             fontSize: 14,
                             color: Color(0xFF00A8E8),
@@ -403,22 +425,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _socialButton({required IconData icon}) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 64,
-        height: 64,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300]!),
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-        ),
-        child: Icon(icon, size: 32, color: Colors.black87),
       ),
     );
   }

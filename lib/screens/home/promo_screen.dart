@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/promo_provider.dart';
-import '../widgets/promo_card.dart';
-import '../utils/theme.dart';
+import '../../providers/promo_provider.dart';
+import '../../widgets/promo_card.dart';
+import '../../utils/theme.dart';
 
 class PromoScreen extends StatefulWidget {
   const PromoScreen({Key? key}) : super(key: key);

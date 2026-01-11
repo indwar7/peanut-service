@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
   # State Management
   provider: ^6.1.1
@@ -22,6 +23,9 @@ dependencies:
 
   # UI Components
   cupertino_icons: ^1.0.6
+
+  # Charts (Added for portfolio visualization)
+  fl_chart: ^0.65.0
 
   # XML Parsing (for SOAP)
   xml: ^6.5.0
@@ -39,3 +43,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Add assets
+  assets:
+    - assets/images/logo.jpg
+    - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.jpg"
+  adaptive_icon_background: "#00D09C" # Your app's primary color
+  adaptive_icon_foreground: "assets/images/logo.jpg"
