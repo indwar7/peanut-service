@@ -1,4 +1,4 @@
-# 🥜 Peanut Trading App
+# Peanut Trading App
 
 Peanut Trading App is a Flutter-based mobile application 
 The application integrates with the **Peanut Client Account Service** to provide authentication, user profile data, open trades listing, and profit calculation in a production-ready UI.
